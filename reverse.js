@@ -5,6 +5,6 @@ function reverse(input) {
       string += input[i];
   }
   return string;
-};
+}
 
 reverse("Hello how are you today?");
