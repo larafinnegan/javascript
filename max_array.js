@@ -1,4 +1,4 @@
-var myMax = function(array) {
+function myMax(array) {
     var max = array[0];
     for (i in array) {
         if (array[i] > max) {
