@@ -6,6 +6,6 @@ function myMax(array) {
         }
     }
     return max;
-};
+}
 
 myMax([1,4,2,6,7,3,2]);
