@@ -1,4 +1,4 @@
-var vowelCount = function(input) {
+function vowelCount(input) {
     var string = input.toLowerCase();
     var vowels = ["a", "e", "i", "o", "u"];
     var count = 0;
