@@ -11,6 +11,6 @@ function vowelCount(input) {
         }
     }
     return count;
-};
+}
 
 vowelCount("My Awesome name is LARA");
