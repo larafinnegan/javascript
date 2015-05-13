@@ -57,7 +57,7 @@ function input(element) {
 		calc.display = [0];
 	}
 	else if (element.id === "negate") {
-		calc.display[calc.display.length - 1] *= (-1);
+		calc.negate;
 	}
 	else if (element.id === "dot") {
 		calc.temp += ".";
