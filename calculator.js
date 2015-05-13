@@ -59,9 +59,11 @@ function input(element) {
 	}
 	else if (element.id === "negate") {
 		calc.negate;
+		calc.display[calc.display.length - 1] = parseFloat(calc.temp);
 	}
 	else if (element.id === "inverse") {
 		calc.inverse;
+		calc.display[calc.display.length - 1] = parseFloat(calc.temp);
 	}
 	else if (element.id === "dot") {
 		calc.temp += ".";
