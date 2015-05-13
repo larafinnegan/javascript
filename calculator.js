@@ -59,10 +59,14 @@ function input(element) {
 	}
 	else if (element.id === "negate") {
 		calc.negate;
+		console.log(calc.temp);
+		console.log(calc.display);
 		calc.display[calc.display.length - 1] = parseFloat(calc.temp);
 	}
 	else if (element.id === "inverse") {
 		calc.inverse;
+		console.log(calc.temp);
+		console.log(calc.display);
 		calc.display[calc.display.length - 1] = parseFloat(calc.temp);
 	}
 	else if (element.id === "dot") {
