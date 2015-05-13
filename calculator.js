@@ -66,7 +66,7 @@ function input(element) {
 	else if (element.id === "m") {
 		calc.m = calc.display[calc.display.length - 1];
 	}
-	else if (element.id == "back") {
+	else if (element.id === "back") {
 		if (calc.display[calc.display.length - 1].length > 0) {
 			console.log(parseFloat(calc.display[calc.display.length - 1].slice(0, -1)));
 		}
