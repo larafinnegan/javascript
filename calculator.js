@@ -51,23 +51,17 @@ var calc = new Calculator();
 function input(element) {
 	if (/\d/.test(element.id)) {
 		calc.temp += element.id;
-		console.log(calc.temp);
 		calc.display[calc.display.length - 1] = parseFloat(calc.temp);
-		document.getElementById("display").innerHTML = calc.display.join(" ");
 	}
 	else if (element.id === "clear") {
 		calc.display = [0];
-		document.getElementById("display").innerHTML = calc.display.join(" ");
 	}
 	else if (element.id === "negate") {
 		calc.display[calc.display.length - 1] *= (-1);
-		document.getElementById("display").innerHTML = calc.display.join(" ");
 	}
 	else if (element.id === "dot") {
 		calc.temp += ".";
-		console.log(calc.temp);
 		calc.display[calc.display.length - 1] = parseFloat(calc.temp);
-		document.getElementById("display").innerHTML = calc.display.join(" ");
 	}
 	else if (element.id === "m") {
 		calc.m = calc.display[calc.display.length - 1];
@@ -79,7 +73,7 @@ function input(element) {
 	}
 	else {
 		calc.display[calc.display.length] = calc.pi;
-		document.getElementById("display").innerHTML = calc.display.join(" ");
 	}
+	document.getElementById("display").innerHTML = calc.display.join(" ");
 }
 
