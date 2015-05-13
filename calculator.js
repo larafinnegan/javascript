@@ -42,6 +42,7 @@ function Calculator() {
 
 	this.inverse = function() {
 		var a = 1 / (this.display[this.display.length -1]);
+		console.log(a);
 		this.display[this.display.length -1] = a;
 	};
 }
