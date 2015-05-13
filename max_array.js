@@ -1,4 +1,4 @@
-var myMax = function(array) {
+function myMax(array) {
     var max = array[0];
     for (i in array) {
         if (array[i] > max) {
@@ -6,6 +6,6 @@ var myMax = function(array) {
         }
     }
     return max;
-};
+}
 
 myMax([1,4,2,6,7,3,2]);
