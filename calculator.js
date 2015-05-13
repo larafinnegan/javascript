@@ -6,32 +6,38 @@ function Calculator() {
 	this.m = 0;
 	this.temp = "0";
 	
-	this.multiply = function(a, b) {
-		return a * b;      
+	this.multiply = function() {
+		var a = this.display[0] * this.display[2];
+		return this.display = [a];
 	};
 
-	this.add = function(a, b) {
-		return a + b;      
+	this.add = function() {
+		var a = this.display[0] + this.display[2];
+		return this.display = [a];   
 	};
 
-	this.divide = function(a, b) {
-		return a / b;      
+	this.divide = function() {
+		var a = this.display[0] / this.display[2];
+		return this.display = [a]; 
 	};
 
 	this.subtract = function(a, b) {
-		return a - b;      
+		var a = this.display[0] - this.display[2];
+		return this.display = [a];     
 	};
 
-	this.squareRoot = function(a) {
-		return Math.sqrt(a);
+	this.squareRoot = function() {
+		var a = Math.sqrt(this.display[0]);
+		return this.display = [a];
 	};
 
-	this.power = function(a, b) {
-		return Math.pow(a, b);
+	this.power = function() {
+		var a = Math.pow(this.display[0], this.display[2]);
+		return this.display = [a];
 	};
 
-	this.negate = function(a) {
-		return a * (-1);
+	this.negate = function() {
+		return this.display[this.display.length -1] *= (-1);
 	};
 
 	this.inverse = function(a) {
