@@ -8,40 +8,41 @@ function Calculator() {
 	
 	this.multiply = function() {
 		var a = this.display[0] * this.display[2];
-		return this.display = [a];
+		this.display = [a];
 	};
 
 	this.add = function() {
 		var a = this.display[0] + this.display[2];
-		return this.display = [a];   
+		this.display = [a];   
 	};
 
 	this.divide = function() {
 		var a = this.display[0] / this.display[2];
-		return this.display = [a]; 
+		this.display = [a]; 
 	};
 
 	this.subtract = function(a, b) {
 		var a = this.display[0] - this.display[2];
-		return this.display = [a];     
+		this.display = [a];     
 	};
 
 	this.squareRoot = function() {
 		var a = Math.sqrt(this.display[0]);
-		return this.display = [a];
+		this.display = [a];
 	};
 
 	this.power = function() {
 		var a = Math.pow(this.display[0], this.display[2]);
-		return this.display = [a];
+		this.display = [a];
 	};
 
 	this.negate = function() {
-		return this.display[this.display.length -1] *= (-1);
+		this.display[this.display.length -1] *= (-1);
 	};
 
-	this.inverse = function(a) {
-		return 1 / a;
+	this.inverse = function() {
+		var a = 1 / (this.display[this.display.length -1]);
+		this.display[this.display.length -1] = a;
 	};
 }
 
@@ -58,6 +59,9 @@ function input(element) {
 	}
 	else if (element.id === "negate") {
 		calc.negate;
+	}
+	else if (element.id === "inverse") {
+		calc.inverse;
 	}
 	else if (element.id === "dot") {
 		calc.temp += ".";
