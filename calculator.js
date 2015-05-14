@@ -79,7 +79,16 @@ function Calculator() {
 	
 	this.populateOperators = function(code) {
 		this.temp = "0";
-		this.display[this.display.length] = code;
+		if (this.display.length === 1) {
+			this.display[this.display.length] = code;
+		}
+		else if (this.display.length === 2) {
+			this.display[this.display.length - 1] = code;
+		}
+		else {
+			this.compute();
+			this.display[this.display.length] = code;
+		}
 	};
 	
 	
@@ -99,13 +108,11 @@ function Calculator() {
 	};
 
 	this.inverse = function() {
-		console.log(this.display);
 		if (this.display[this.display.length -1] === 0) {
 			alert("Cannot divide by 0.");
 		}
 		else {
 			this.display[this.display.length -1] = this.result = (1 / (this.display[this.display.length -1]));
-			console.log(this.display);
 		}
 	};
 }
