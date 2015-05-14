@@ -2,7 +2,7 @@
 function Calculator() {
 
 	this.display = [0];
-	this.m = 0;
+	this.mem = 0;
 	this.temp = "0";
 	this.result = 0;
 	
@@ -22,6 +22,24 @@ function Calculator() {
 		}
 	};
 	
+	this.memset = function() {
+		if (isNaN(this.display[this.display.length - 1])) {
+			this.m = this.display[this.display.length - 2];
+		}
+		else {
+			this.m = this.display[this.display.length - 1];
+		}
+	};
+	
+	this.memrecall = function() {
+		if (isNaN(this.display[this.display.length - 1])) {
+			this.display[this.display.length] = this.m;
+		}
+		else {
+			this.display[this.display.length - 1] = this.m;
+		}
+	};
+	
 	this.equals = function() {
 		console.log(this.display);
 		if (this.display.length === 2) {
@@ -37,7 +55,6 @@ function Calculator() {
 		this.temp += id;
 		if (isNaN(this.display[this.display.length - 1])) {
 			this.display[this.display.length] = parseFloat(this.temp);
-			console.log(this.result + "res");
 		}
 		else if (this.result !== 0) {
 			this.temp = id;
@@ -91,7 +108,6 @@ function Calculator() {
 		}
 	};
 	
-	
 	this.clear = function() {
 		this.temp = "0";
 		this.display = [0];
@@ -119,6 +135,7 @@ function Calculator() {
 
 var calc = new Calculator();
 
+document.getElementById("display").innerHTML = calc.display.join(" ");
 
 function input(element) {
 	if (/^[0-9]$/.test(element.innerHTML)) {
