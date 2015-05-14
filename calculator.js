@@ -4,20 +4,21 @@ function Calculator() {
 	this.display = [0];
 	this.m = 0;
 	this.temp = "0";
+	this.result = 0;
 	
 	this.compute = function() {
 		this.temp = "0";
 		switch(this.display[1]) {
 			case "+":
-				return this.display = [this.display[0] + this.display[2]];
+				return this.display = this.result = [this.display[0] + this.display[2]];
 			case "-":
-				return this.display = [this.display[0] - this.display[2]];
+				return this.display = this.result = [this.display[0] - this.display[2]];
 			case "/":
-				return this.display = [this.display[0] / this.display[2]];
+				return this.display = this.result = [this.display[0] / this.display[2]];
 			case "*":
-				return this.display = [this.display[0] * this.display[2]];
+				return this.display = this.result = [this.display[0] * this.display[2]];
 			case "^":
-				return this.display = [Math.pow(this.display[0], this.display[2])];
+				return this.display = this.result = [Math.pow(this.display[0], this.display[2])];
 		}
 	};
 	
@@ -36,10 +37,16 @@ function Calculator() {
 		this.temp += id;
 		if (isNaN(this.display[this.display.length - 1])) {
 			this.display[this.display.length] = parseFloat(this.temp);
+			console.log(this.result + "res");
+		}
+		else if (this.result !== 0) {
+			this.temp = id;
+			this.display = [parseFloat(this.temp)];
 		}
 		else {
 			this.display[this.display.length - 1] = parseFloat(this.temp);
 		}
+		this.result = 0;
 	};
 	
 	this.dot = function() {
@@ -59,8 +66,10 @@ function Calculator() {
 	};
 	
 	this.back = function() {
-		this.temp = this.temp.substring(0, this.temp.length - 1);
-		this.display[this.display.length - 1] = parseFloat(this.temp);
+		if (this.result === 0) {
+			this.temp = this.temp.substring(0, this.temp.length - 1);
+			this.display[this.display.length - 1] = parseFloat(this.temp);
+		}
 	};
 	
 	this.populateOperators = function(code) {
@@ -72,10 +81,11 @@ function Calculator() {
 	this.clear = function() {
 		this.temp = "0";
 		this.display = [0];
+		this.result = 0;
 	};
 
 	this.sqroot = function() {
-		this.display = Math.sqrt(this.display[this.display.length - 1]);
+		this.display[this.display.length - 1] = this.result = Math.sqrt(this.display[this.display.length - 1]);
 	};
 
 	this.negate = function() {
@@ -86,13 +96,11 @@ function Calculator() {
 	this.inverse = function() {
 		console.log(this.display);
 		if (this.display[this.display.length -1] === 0) {
-			console.log(this.display + "first");
 			alert("Cannot divide by 0.");
 		}
 		else {
-			console.log(this.display + "second");
-			this.display[this.display.length -1] = (1 / (this.display[this.display.length -1]));
-			console.log(this.display + "secondafter");
+			this.display[this.display.length -1] = this.result = (1 / (this.display[this.display.length -1]));
+			console.log(this.display);
 		}
 	};
 }
