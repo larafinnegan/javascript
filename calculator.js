@@ -67,7 +67,12 @@ function Calculator() {
 	
 	this.back = function() {
 		if (this.result === 0) {
-			this.temp = this.temp.substring(0, this.temp.length - 1);
+			if (this.temp.length <= 1) {
+				this.temp = "0";
+			}
+			else {
+				this.temp = this.temp.substring(0, this.temp.length - 1);
+			}
 			this.display[this.display.length - 1] = parseFloat(this.temp);
 		}
 	};
