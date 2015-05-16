@@ -2,7 +2,7 @@
 function Calculator() {
 
 	this.display = [0];
-	this.mem = 0;
+	this.m = 0;
 	this.temp = "0";
 	this.result = 0;
 	
@@ -133,23 +133,26 @@ function Calculator() {
 	};
 }
 
-var calc = new Calculator();
 
-document.getElementById("display").innerHTML = calc.display.join(" ");
 
-function input(element) {
-	if (/^[0-9]$/.test(element.innerHTML)) {
-		calc.num(element.innerHTML);
-	}
-	else if (containsID(["add", "subtract", "multiply", "divide", "power"], element.id)) {
-		calc.populateOperators(element.innerHTML);
-	}
-	else {
-		calc[element.id]();
-	}
-	document.getElementById("display").innerHTML = calc.display.join(" ");
-}
+$(document).ready(function() {
 
+	var calc = new Calculator();
+
+	$('button').click(function() {
+
+		if (this.className === 'num') {
+			calc.num(this.innerHTML);
+		}
+		else if (containsID(["add", "subtract", "multiply", "divide", "power"], this.id)) {
+			calc.populateOperators(this.innerHTML);
+		}
+		else {
+			calc[this.id]();
+		}
+		document.getElementById("display").innerHTML = calc.display.join(" ");
+	});
+});
 
 function containsID(array, id) {
     for (var i = 0; i < array.length; i++) {
