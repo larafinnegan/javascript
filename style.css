@@ -18,6 +18,22 @@
 	background-color: #dbdbdb;
 	font-size: 20px;
 	box-shadow: inset 2px 2px 1px #939393;
+	text-align: right;
+	font-family: serif;
+}
+
+#history {
+	border: 1px solid black;
+	height: 30%;
+	padding-right: 5px;
+	padding-left: 10px;
+}
+
+#current {
+	border: 1px solid black;
+	height: 60%;
+	font-size: 30px;
+	padding: 5px 5px 0 5px;
 }
 
 .row {
