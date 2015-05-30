@@ -23,17 +23,15 @@
 }
 
 #history {
-	border: 1px solid black;
 	height: 30%;
-	padding-right: 5px;
+	padding-right: 10px;
 	padding-left: 10px;
 }
 
 #current {
-	border: 1px solid black;
 	height: 60%;
 	font-size: 30px;
-	padding: 5px 5px 0 5px;
+	padding: 5px 10px 0 5px;
 }
 
 .row {

@@ -5,19 +5,28 @@ var calc = {
 	compute: function(array) {
 		array[0] = parseFloat(array[0]);
 		array[2] = parseFloat(array[2]);
-
 		switch(array[1]) {
 			case "+":
 				return array[0] + array[2];
 			case "-":
 				return array[0] - array[2];
 			case "/":
-				return array[0] / array[2];
+				if (array[2] === 0) {
+					this.divZero();
+					box.clear();
+				}
+				else {
+					array[0] / array[2];
+				}
 			case "*":
 				return array[0] * array[2];
 			case "^":
 				return Math.pow(array[0], array[2]);
 		}
+	},
+	
+	divZero: function() {
+		alert("Cannot divide by 0.");
 	},
 	
 	memset: function() {
@@ -29,28 +38,24 @@ var calc = {
 	},
 		
 	pi: function() {
-		if (isNaN(box.inputs[box.inputs.length - 1])) {
-			box.inputs[box.inputs.length] = box.current = Math.PI;
-		}
-		else {
-			box.inputs[box.inputs.length - 1] = box.current = Math.PI;
-		}
+		box.result = box.current = Math.PI;
 	},
 
 	sqroot: function() {
-		this.display[this.display.length - 1] = this.result = Math.sqrt(this.display[this.display.length - 1]);
+		box.result = box.current = Math.sqrt(box.current);
 	},
 
 	negate: function() {
 		box.current *= (-1);
+		box.result *= (-1);
 	},
 
 	inverse: function() {
 		if (box.current === 0) {
-			alert("Cannot divide by 0.");
+			this.divZero();
 		}
 		else {
-			this.display[this.display.length -1] = this.result = (1 / (this.display[this.display.length -1]));
+			box.current = 1 / box.current;
 		}
 	}
 };
@@ -61,24 +66,25 @@ $(document).ready(function() {
 
 
 var box = {
-	current: "",
-	inputs: ["0"],
+	current: "0",
+	inputs: [],
 	result: "",
 	
+	strip: function(number) {
+		return (parseFloat(number.toPrecision(12)));
+	},
+	
 	populateCurrent: function(input) {
-		if (this.inputs[0] === "0" && this.inputs.length === 1) {
-			this.inputs = [input];
+		if (this.current === "0" || this.result !== "") {
 			this.current = input;
-			console.log("a");
-			console.log(this.inputs);
+			this.result = "";
 		}
-		else if (this.inputs.length % 2 === 0) {
-			this.current = input;
-			this.inputs.push(input);
+		else if (this.current === "0" && input === "0") {
+			this.current = "0";
 		}
 		else {
 			this.current += input;
-			this.inputs[this.inputs.length - 1] = this.current;
+			console.log(this.current.indexOf("."));
 		}
 		console.log(this.inputs);
 	},
@@ -86,72 +92,80 @@ var box = {
 	showHistory: function() {
 		document.getElementById("history").innerHTML = this.inputs.join(" ");
 	},
-
-	showResult: function() {
-		document.getElementById("current").innerHTML = this.result;
+	
+	hideHistory: function() {
+		document.getElementById("history").innerHTML = "";
 	},
 	
-	showCurrent: function() {
-		document.getElementById("current").innerHTML = this.current;
+	show: function(input) {
+		document.getElementById("current").innerHTML = input;
 	},
 	
 	populateOperators: function(operator) {
-		if (this.inputs.length % 2 === 0) {
+		this.show(this.current);
+		if (this.current !== "0") {
+			this.inputs.push(this.current);
+		}
+		if (this.inputs.length === 0) {
+			this.inputs = [0, operator];
+		}
+		else if (this.inputs.length === 2) {
 			this.inputs[this.inputs.length - 1] = operator;
+		}
+		else if (this.inputs.length > 2) {
+			this.equals();
+			this.inputs.push(operator);
 		}
 		else {
 			this.inputs.push(operator);
 		}
-		this.calcResult();
-		console.log(this.result);
 		this.current = "0";
+		console.log(this.inputs);
+		this.showHistory();
 	},
 	
 	dot: function() {
-		if (this.current % 1 === 0) {
+		if (this.current === "0") {
+			this.current = "0."
+		}
+		else if (this.current % 1 === 0) {
 			this.current += ".";
 		}
+		this.show(this.current);
 	},
 	
 	clear: function() {
-		this.current = "";
-		this.inputs = ['0'];
+		this.current = "0";
+		this.inputs = [];
 		this.result = "";
 	},
 	
 	back: function() {
-		if (this.inputs.length % 2 !== 0) {
+		if (this.current !== "0") {
 			this.current = this.current.substring(0, this.current.length - 1);
-			this.inputs[this.inputs.length - 1] = this.current;
 		}
-		this.showCurrent();
+		this.show(this.current);
 	},
 	
 	calcResult: function() {
 		if (this.inputs.length <= 2) {
 			this.result = this.inputs[0];
-			console.log("a");
 		}
-		else if (this.inputs.length === 3) {
+		else {
 			this.result = calc.compute(this.inputs);
-			console.log("b");
-		}
-		else if (this.inputs.length === 4) {
-			this.result = calc.compute(this.inputs.slice(0, this.inputs.length - 1));
-		}
-		else if (this.inputs.length % 2 === 0) {
-			console.log(this.result);
-			console.log([this.result, this.inputs[this.inputs.length - 3], this.inputs[this.inputs.length - 2]]);
-			this.result = calc.compute([this.result, this.inputs[this.inputs.length - 3], this.inputs[this.inputs.length - 2]]);
-			console.log("c");
 		}
 	},
 	
 	equals: function() {
+		if (this.current !== "") {
+			this.inputs.push(this.current);
+		}
 		this.calcResult();
 		this.inputs = [this.result];
-		this.current = "";
-	},
+		this.current = "0";
+		this.hideHistory();
+		this.show(this.result);
+	}
 };
 
 var input = {
@@ -160,23 +174,26 @@ var input = {
 		$('button').click(function() {
 			if (this.className === 'num') {
 				box.populateCurrent(this.innerHTML);
-				box.showCurrent();
+				box.show(box.current);
 			}
 			else if (containsID(["dot", "back"], this.id)) {
 				box[this.id]();
+				box.show(box.current);
 			}
 			else if (containsID(["add", "subtract", "multiply", "divide", "power"], this.id)) {
 				box.populateOperators(this.innerHTML);
-				box.showResult();
 			}
 			else if (containsID(["clear", "equals"], this.id)) {
 				box[this.id]();
-				box.showResult();
+				box.show(box.result);
 			}
 			else {
 				calc[this.id]();
+				box.show(box.current);
 			}
-			box.showHistory();
+			console.log("result : " + box.result);
+			console.log("current : " + box.current);
+			console.log("inputs : " + box.inputs);
 		});
 	}
 };
