@@ -75,7 +75,7 @@ var box = {
 	},
 
 	pi: function() {
-		this.current = Math.PI;
+		this.current = "3.14159265359";
 		this.result = true;
 	},
 
@@ -85,7 +85,7 @@ var box = {
 	},
 
 	negate: function() {
-		this.current *= (-1);
+		if (this.current !== "0") this.current *= (-1);
 	},
 
 	inverse: function() {
@@ -93,12 +93,7 @@ var box = {
 	},
 	
 	dot: function() {
-		if (this.current === "0") {
-			this.current = "0.";
-		}
-		else if (this.current % 1 === 0) {
-			this.current += ".";
-		}
+		if (this.current % 1 === 0) this.current += ".";
 	},
 	
 	clear: function() {
@@ -108,11 +103,13 @@ var box = {
 	},
 	
 	back: function() {
-		if (this.current !== "0") this.current = this.current.substring(0, this.current.length - 1);
+		if (this.result === false) {
+			this.current = (this.current.length === 1 ? "0" : this.current.substring(0, this.current.length - 1));
+		}
 	},
 	
 	calcResult: function() {
-		this.inputs.length <= 2 ? this.current = this.inputs[0] : this.current = calc.compute(this.inputs);
+		this.current = (this.inputs.length <= 2 ? this.inputs[0] : calc.compute(this.inputs));
 	},
 	
 	equals: function() {

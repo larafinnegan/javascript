@@ -78,6 +78,20 @@ describe('box#populateCurrent', function() {
     expect(box.current).toEqual("123");
   });
 
+ it('appends inputs to the end of decimals', function() {
+    box.current = "0.";
+    box.populateCurrent("1");
+    box.populateCurrent("2");
+    box.populateCurrent("3");
+    expect(box.current).toEqual("0.123");
+    box.current = "3.";
+    box.populateCurrent("1");
+    expect(box.current).toEqual("3.1");
+    box.current = "3.22";
+    box.populateCurrent("1");
+    expect(box.current).toEqual("3.221");
+  });
+
  it('overwrites the current string when the current string is a calculation result', function() {
     box.current = "2295";
     box.result = true;
@@ -110,5 +124,120 @@ describe('box#memrecall', function() {
     box.m = "54321";
     box.memrecall();
     expect(box.current).toEqual("54321");
+  });
+});
+
+describe('box#negate', function() {
+
+  it('should multiply the current input string by -1', function() {
+    box.current = "54321";
+    box.negate();
+    expect(box.current).toEqual(-54321);
+    box.negate();
+    expect(box.current).toEqual(54321);
+  });
+
+  it('does not multiply the current string by -1 if current string is 0', function() {
+    box.current = "0";
+    box.negate();
+    expect(box.current).toEqual("0");
+  });
+});
+
+describe('box#dot', function() {
+
+  it('positions decimal correctly when the current string is 0', function() {
+    box.current = "0";
+    box.dot();
+    expect(box.current).toEqual("0.");
+  });
+
+  it('does not add a decimal if the current string already contains a decimal', function() {
+    box.current = "3.2";
+    box.dot();
+    expect(box.current).toEqual("3.2");
+  })
+});
+
+describe('box#back', function() {
+
+  it('removes the last input from the input string', function() {
+    box.current = "1234";
+    box.back();
+    expect(box.current).toEqual("123");
+  });
+
+  it('does not remove the last input when the current string is 0', function() {
+    box.current = "0";
+    box.back();
+    expect(box.current).toEqual("0");
+  });
+
+  it('sets the current string to 0 when the current string is a single non-zero digit', function() {
+    box.current = "4";
+    box.back();
+    expect(box.current).toEqual("0");
+  });
+
+   it('does not remove the last input when the current string is a result', function() {
+    box.current = "2345";
+    box.result = true;
+    box.back();
+    box.back();
+    expect(box.current).toEqual("2345");
+  });
+});
+
+describe('this#clear', function() {
+
+  beforeEach(function() {
+    box.current = "345";
+    box.result = true;
+    box.inputs = ["1", "*"];
+  })
+
+  it('sets the current string to 0', function() {
+    box.clear();
+    expect(box.current).toEqual("0");
+  });
+
+  it('sets the result flag to false', function() {
+    box.clear();
+    expect(box.result).toBe(false);
+  });
+
+  it('empties the input array', function() {
+    box.clear();
+    expect(box.inputs.length).toEqual(0);
+  });
+});
+
+describe('box#pi', function() {
+
+  it('sets the current input to pi', function() {
+    box.current = "123";
+    box.pi();
+    expect(box.current).toEqual("3.14159265359");
+  });
+
+  it('sets the result flag to true', function() {
+    box.current = "0";
+    box.pi();
+    expect(box.result).toBe(true);
+  });
+});
+
+describe('box#sqroot', function() {
+
+  it('sets the current input to the square root of the current input', function() {
+    box.current = "36";
+    box.sqroot();
+    expect(box.current).toEqual(6);
+  });
+
+  it('sets the result flag to true', function() {
+    box.current = "0";
+    box.sqroot();
+    expect(box.result).toBe(true);
   });
 });
