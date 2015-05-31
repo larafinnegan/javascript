@@ -1,27 +1,18 @@
+// performs the standard add/subtract/multiply/divide/exponential functions
 var calc = {
-
 	
 	compute: function(array) {
 		array[0] = parseFloat(array[0]);
 		array[2] = parseFloat(array[2]);
 		switch(array[1]) {
-			case "+":
-				return array[0] + array[2];
-			case "-":
-				return array[0] - array[2];
-			case "/":
-				return array[0] / array[2];
-			case "*":
-				return array[0] * array[2];
-			case "^":
-				return Math.pow(array[0], array[2]);
+			case "+": return array[0] + array[2];
+			case "-": return array[0] - array[2];
+			case "/": return array[0] / array[2];
+			case "*": return array[0] * array[2];
+			case "^": return Math.pow(array[0], array[2]);
 		}
-	},
+	}
 };
-
-$(document).ready(function() {
-	input.getInput();
-});
 
 
 var box = {
@@ -45,7 +36,6 @@ var box = {
 		else {
 			this.current += input;
 		}
-		this.showCurrent();
 	},
 	
 	showHistory: function() {
@@ -130,11 +120,15 @@ var box = {
 		this.calcResult();
 		this.inputs = [this.current];
 		this.result = true;
-		this.showCurrent();
 		this.hideHistory();
 	}
 };
 
+$(document).ready(function() {
+	input.getInput();
+});
+
+// parses the input from the HTML
 var input = {
 
 	getInput: function() {
@@ -142,22 +136,16 @@ var input = {
 			if (this.className === 'num') {
 				box.populateCurrent(this.innerHTML);
 			}
-			else if (containsID(["dot", "back", "clear", "equals", "memset", "memrecall"], this.id)) {
-				box[this.id]();
-			}
-			else {
+			else if (this.className === "operator") {
 				box.populateOperators(this.innerHTML);
 			}
+			else {
+				box[this.id]();
+			}
+			box.showCurrent();
 			console.log("result : " + box.result);
 			console.log("current : " + box.current);
 			console.log("inputs : " + box.inputs);
 		});
 	}
 };
-
-function containsID(array, id) {
-    for (var i = 0; i < array.length; i++) {
-        if (array[i] === id) return true;
-    }
-    return false;
-}
