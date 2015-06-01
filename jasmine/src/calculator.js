@@ -16,8 +16,8 @@ var calc = {
 
 
 var box = {
-	current: "0",
-	inputs: [],
+	current: "",
+	inputs: [null, null, null],
 	result: false,
 	m: 0,
 	
@@ -26,7 +26,7 @@ var box = {
 	},
 	
 	populateCurrent: function(input) {
-		if (this.result || this.current === "0") {
+		if (this.result || !this.current || this.current === "0") {
 			this.current = input;
 			this.result = false;
 		}
@@ -59,20 +59,20 @@ var box = {
 	},
 	
 	populateOperators: function(operator) {
-		this.inputs.push(this.current);
-		if (this.inputs.length < 2) {
-			this.inputs.push(operator);
-			this.current = "0";
+		if (!this.inputs[0]) {
+			this.inputs[0] = (this.current ? this.current : 0);
+			this.inputs[1] = operator;
 		}
-		else if (this.inputs.length === 2) {
-			this.inputs[this.inputs.length - 1] = operator;
+		else if (!this.inputs[2] && !this.current) {
+			this.inputs[1] = operator;
 		}
 		else {
+			this.inputs[2] = this.current;
 			this.equals();
-			this.inputs.push(operator);
+			this.inputs[1] = operator;
 		}
-		this.showHistory();
-	},
+		this.current = "";
+},
 
 	pi: function() {
 		this.current = "3.14159265359";
@@ -93,12 +93,17 @@ var box = {
 	},
 	
 	dot: function() {
-		if (this.current % 1 === 0) this.current += ".";
+		if (!this.current) {
+			this.current = "0.";
+		}
+		else if (this.current % 1 === 0)  {
+			this.current += ".";
+		}
 	},
 	
 	clear: function() {
-		this.current = "0";
-		this.inputs = [];
+		this.current = "";
+		this.inputs = [null, null, null];
 		this.result = false;
 	},
 	
@@ -109,15 +114,25 @@ var box = {
 	},
 	
 	calcResult: function() {
-		this.current = (this.inputs.length <= 2 ? this.inputs[0] : calc.compute(this.inputs));
+		if (this.inputs[0] && this.inputs[2]) {
+			this.current = calc.compute(this.inputs);
+		}
+		else if (this.inputs[0]) {
+			this.current = this.inputs[0];
+		}
 	},
 	
 	equals: function() {
-		this.inputs.push(this.current);
+		if (this.current && !this.inputs[0]) {
+			this.inputs[0] = this.current;
+		}
+		else if (this.current && !this.inputs[2]) {
+			this.inputs[2] = this.current;
+		}
 		this.calcResult();
-		this.inputs = [this.current];
+		this.inputs = [this.current, null, null];
 		this.result = true;
-		this.hideHistory();
+		this.showHistory();
 	}
 };
 

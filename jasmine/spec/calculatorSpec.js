@@ -45,9 +45,9 @@ describe("calc#compute", function() {
 describe('box#populateCurrent', function() {
 
   beforeEach(function() {
-    box.current = "0";
+    box.current = "";
     box.result = false;
-    box.history = [];
+    box.history = [null, null, null];
   });
 
   it('sets the current input string to the user input', function() {
@@ -106,7 +106,6 @@ describe('box#populateCurrent', function() {
     box.populateCurrent("3");
     expect(box.result).toBe(false);
   });
-
 });
 
 describe('box#memset', function() {
@@ -198,7 +197,7 @@ describe('this#clear', function() {
 
   it('sets the current string to 0', function() {
     box.clear();
-    expect(box.current).toEqual("0");
+    expect(box.current).toEqual("");
   });
 
   it('sets the result flag to false', function() {
@@ -208,7 +207,9 @@ describe('this#clear', function() {
 
   it('empties the input array', function() {
     box.clear();
-    expect(box.inputs.length).toEqual(0);
+    expect(box.inputs[0]).toBeNull;
+    expect(box.inputs[1]).toBeNull;
+    expect(box.inputs[2]).toBeNull;
   });
 });
 
@@ -236,8 +237,170 @@ describe('box#sqroot', function() {
   });
 
   it('sets the result flag to true', function() {
-    box.current = "0";
+    box.current = "20";
     box.sqroot();
+    expect(box.current).toEqual(4.47213595499958);
     expect(box.result).toBe(true);
   });
 });
+
+describe('box#populateOperators', function() {
+
+  beforeEach(function() {
+    box.showHistory = jasmine.createSpy("showHistory() spy");
+    box.hideHistory = jasmine.createSpy("hideHistory() spy");
+    box.clear();
+});
+ 
+
+  it('populates an operator in the input array and sets current input to 0', function() {
+    box.current = "12";
+    box.populateOperators("-");
+    expect(box.current).toEqual("");
+    expect(box.inputs).toEqual(["12", "-", null]);
+  });
+
+  it('sets the first number to 0 if the first input is an operator', function() {
+    box.populateOperators("*");
+    expect(box.current).toEqual("");
+    expect(box.inputs).toEqual([0, "*", null]);
+  });
+
+  it('if the last input was an operator, it updates the operator to the new operator', function() {
+    box.inputs = ["3", "-", null];
+    box.populateOperators("*");
+    box.populateOperators("/");
+    expect(box.inputs).toEqual(["3", "/", null]);
+    expect(box.result).toBe(false);
+  });
+
+  it('if the input array has a length of 3 already, calc the array', function() {
+    box.inputs = ["3", "-", null];
+    box.current = "5";
+    box.populateOperators("*");
+    expect(box.inputs).toEqual([-2, "*", null]);
+    expect(box.result).toBe(true);
+  });
+
+   it('correctly performs a second calc', function() {
+    box.inputs = ["3", "+", null];
+    box.current = "5";
+    box.populateOperators("*");
+    expect(box.inputs).toEqual([8, "*", null]);
+    box.populateOperators("-");
+    expect(box.inputs).toEqual([8, "-", null]);
+    box.populateCurrent("6");
+    box.populateOperators("*");
+    expect(box.inputs).toEqual([2, "*", null]);
+    expect(box.result).toBe(true);
+  });
+});
+
+describe('box#calcResult', function() {
+
+  beforeEach(function() {
+    box.clear();
+  });
+
+    it('does not do anything if the input array is empty', function() {
+      box.calcResult();
+      expect(box.current).toEqual("");
+    });
+
+    it('sets current string to first input array value if inputs array has only one value', function() {
+      box.inputs = ["2", null, null];
+      box.calcResult();
+      expect(box.current).toEqual("2");
+      box.inputs = ["4.3", "*", null];
+      box.calcResult();
+      expect(box.current).toEqual("4.3");
+    });
+
+    it('sets current string to the result of the operation if inputs array size = 3', function() {
+      box.inputs = ["2", "*", "4"];
+      box.calcResult();
+      expect(box.current).toEqual(8);
+    });
+  });
+
+describe('box#equals', function() {
+
+  beforeEach(function() {
+    box.clear();
+  });
+
+    it('does not do anything if the input array is empty', function() {
+      box.equals();
+      expect(box.current).toEqual("");
+      expect(box.result).toBe(true);
+      expect(box.inputs[0]).toBeNull;
+    expect(box.inputs[1]).toBeNull;
+    expect(box.inputs[2]).toBeNull;
+    });
+
+    it('sets current string to first input array value if inputs array has only one value', function() {
+      box.inputs = ["2", null, null];
+      box.equals();
+      expect(box.current).toEqual("2");
+      expect(box.result).toBe(true);
+      expect(box.inputs[0]).toBeNull;
+      expect(box.inputs[1]).toBeNull;
+      expect(box.inputs[2]).toBeNull;
+    });
+
+     it('ignores the operator if equals is called directly after an operator is entered', function() {
+      box.inputs = ["2", "+"];
+      box.equals();
+      expect(box.current).toEqual("2");
+      expect(box.result).toBe(true);
+      expect(box.inputs[0]).toBeNull;
+    expect(box.inputs[1]).toBeNull;
+    expect(box.inputs[2]).toBeNull;
+    });
+
+    it('sets current string to the result of the operation if inputs array size = 3', function() {
+      box.inputs = ["5", "*", "4"];
+      box.equals();
+      expect(box.current).toEqual(20);
+      expect(box.result).toBe(true);
+      expect(box.inputs[0]).toBeNull;
+    expect(box.inputs[1]).toBeNull;
+    expect(box.inputs[2]).toBeNull;
+    });
+  });
+
+
+describe('integration', function() {
+
+  beforeEach(function() {
+    box.clear();
+  });
+
+    it('integration test 1', function() {
+      box.populateCurrent("3");
+      box.dot();
+      box.populateOperators("*")
+      expect(box.inputs).toEqual(["3.", "*", null]);
+      box.populateCurrent("1");
+      box.populateCurrent("2");
+      box.back();
+      box.back();
+      box.back();
+      expect(box.current).toEqual("0");
+      box.populateCurrent("2");
+      box.populateCurrent("0");
+      expect(box.current).toEqual("20");
+      box.memset();
+      box.pi();
+      expect(box.current).toEqual("3.14159265359");
+      box.populateOperators("-");
+      expect(box.inputs).toEqual([9.424777960770001, "-", null]);
+      box.populateOperators("+");
+      expect(box.inputs).toEqual([9.424777960770001, "+", null]);
+      box.populateCurrent("1");
+      box.memrecall();
+      expect(box.current).toEqual("20");
+      box.equals();
+      expect(box.current).toEqual(29.42477796077);
+    });
+  });
