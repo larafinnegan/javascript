@@ -126,7 +126,7 @@ var box = {
 		this.calcResult();
 		this.inputs = [this.current, null, null];
 		this.result = true;
-		this.showHistory();
+		this.hideHistory();
 	}
 };
 
