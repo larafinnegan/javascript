@@ -213,9 +213,9 @@ describe('this#clear', function() {
 
   it('empties the input array', function() {
     box.clear();
-    expect(box.inputs[0]).toBeNull;
-    expect(box.inputs[1]).toBeNull;
-    expect(box.inputs[2]).toBeNull;
+    expect(box.inputs[0]).toBeNull();
+    expect(box.inputs[1]).toBeNull();
+    expect(box.inputs[2]).toBeNull();
   });
 });
 

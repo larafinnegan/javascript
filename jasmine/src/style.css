@@ -24,14 +24,21 @@
 
 #history {
 	height: 30%;
+      padding-top: 5px;
 	padding-right: 10px;
 	padding-left: 10px;
+      overflow: hidden;
+      margin-left: 14px;
+      margin-right: 14px;
 }
 
 #current {
 	height: 60%;
 	font-size: 30px;
-	padding: 5px 10px 0 5px;
+	padding: 5px 10px 0 5px -5px;
+      margin-left: 14px;
+      margin-right: 14px;
+      overflow: hidden;
 }
 
 .row {

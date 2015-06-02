@@ -22,7 +22,7 @@ var box = {
 	m: 0,
 	
 	strip: function(number) {
-		return (parseFloat(number.toPrecision(12)));
+		return (parseFloat(number.toPrecision(11)));
 	},
 	
 	populateCurrent: function(input) {
@@ -47,7 +47,7 @@ var box = {
 	},
 	
 	showCurrent: function() {
-		document.getElementById("current").innerHTML = this.current;
+		document.getElementById("current").innerHTML = (this.current ? this.current : "0");
 	},
 
 	memset: function() {
@@ -68,7 +68,8 @@ var box = {
 		}
 		this.inputs[1] = operator;
 		this.current = "";
-},
+		this.showHistory();
+	},
 
 	pi: function() {
 		this.current = "3.14159265359";
@@ -81,7 +82,7 @@ var box = {
 	},
 
 	negate: function() {
-		if (this.current !== "0" || this.current) this.current *= (-1);
+		if (this.current && this.current !== "0") this.current *= (-1);
 	},
 
 	inverse: function() {
@@ -148,9 +149,6 @@ var input = {
 				box[this.id]();
 			}
 			box.showCurrent();
-			console.log("result : " + box.result);
-			console.log("current : " + box.current);
-			console.log("inputs : " + box.inputs);
 		});
 	}
 };
