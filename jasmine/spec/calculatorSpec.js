@@ -141,6 +141,12 @@ describe('box#negate', function() {
     box.negate();
     expect(box.current).toEqual("0");
   });
+  
+  it('should return a blank input string if input is blank', function() {
+    box.current = "";
+    box.negate();
+    expect(box.current).toEqual("");
+  });
 });
 
 describe('box#dot', function() {

@@ -61,16 +61,12 @@ var box = {
 	populateOperators: function(operator) {
 		if (!this.inputs[0]) {
 			this.inputs[0] = (this.current ? this.current : 0);
-			this.inputs[1] = operator;
 		}
-		else if (!this.inputs[2] && !this.current) {
-			this.inputs[1] = operator;
-		}
-		else {
+		else if (!this.inputs[2] && this.current) {
 			this.inputs[2] = this.current;
 			this.equals();
-			this.inputs[1] = operator;
 		}
+		this.inputs[1] = operator;
 		this.current = "";
 },
 
@@ -85,7 +81,7 @@ var box = {
 	},
 
 	negate: function() {
-		if (this.current !== "0") this.current *= (-1);
+		if (this.current !== "0" || this.current) this.current *= (-1);
 	},
 
 	inverse: function() {
@@ -123,11 +119,8 @@ var box = {
 	},
 	
 	equals: function() {
-		if (this.current && !this.inputs[0]) {
-			this.inputs[0] = this.current;
-		}
-		else if (this.current && !this.inputs[2]) {
-			this.inputs[2] = this.current;
+		if (this.current) { 
+			this.inputs[0] ? this.inputs[2] = this.current : this.inputs[0] = this.current;
 		}
 		this.calcResult();
 		this.inputs = [this.current, null, null];
